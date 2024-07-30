@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 7dafe93118e0ffc44bdedf98a7b145dd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - idleMaterial: {fileID: 2100000, guid: d017ea8f440ccfe4b86b346476ea1f30, type: 2}
+  - happyMaterial: {fileID: 2100000, guid: ea25c1cc3d0229648aa73e9f54111dcd, type: 2}
+  - sadMaterial: {fileID: 2100000, guid: 159e6a62308b56046b915dd8c6949ab9, type: 2}
+  - hungryMaterial: {fileID: 2100000, guid: b95d614024ac66f4f9058d03493a93f0, type: 2}
+  - snackMaterial: {fileID: 2100000, guid: 2d7adbb597eb4a74f9a3d8877ed1237a, type: 2}
+  - playfulMaterial: {fileID: 2100000, guid: 3b05cb8d00b82cb40a12717fc487b1db, type: 2}
+  - balloonRenderer: {fileID: -944733871917576002, guid: 31327d818796343448e72ab04ad981dd, type: 3}
+  - threadRenderer: {fileID: 1871911159894831636, guid: 31327d818796343448e72ab04ad981dd, type: 3}
+  - petStateText: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
