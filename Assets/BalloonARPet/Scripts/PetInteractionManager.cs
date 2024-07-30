@@ -27,8 +27,6 @@ public class PetInteractionManager : MonoBehaviour
 
     [SerializeField]
     private Renderer balloonRenderer; // Assign this via the Inspector
-    [SerializeField]
-    private Renderer threadRenderer; // Assign this via the Inspector
 
     [SerializeField]
     private Text petStateText; // Assign this via the Inspector
@@ -42,10 +40,7 @@ public class PetInteractionManager : MonoBehaviour
         {
             Debug.LogError("Balloon Renderer component is missing. Assign it in the Inspector.");
         }
-        if (threadRenderer == null)
-        {
-            Debug.LogError("Thread Renderer component is missing. Assign it in the Inspector.");
-        }
+
         if (idleMaterial == null || happyMaterial == null || sadMaterial == null || hungryMaterial == null ||
             snackMaterial == null || playfulMaterial == null)
         {
@@ -90,7 +85,7 @@ public class PetInteractionManager : MonoBehaviour
 
     private void SetMaterial(Material material)
     {
-        if (balloonRenderer == null || threadRenderer == null)
+        if (balloonRenderer == null)
         {
             Debug.LogError("One or more Renderer components are missing.");
             return;
@@ -104,12 +99,11 @@ public class PetInteractionManager : MonoBehaviour
         // Check if the material is applied correctly
         Debug.Log("Applying material: " + material.name);
         // Ensure materials are not null
-        if (balloonRenderer.material == null || threadRenderer.material == null)
+        if (balloonRenderer.material == null)
         {
             Debug.LogError("Renderer material is null.");
         }
         balloonRenderer.material = material;
-        threadRenderer.material = material;
     }
 
     public void GiveSnack()
