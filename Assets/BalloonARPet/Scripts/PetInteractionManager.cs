@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class PetInteractionManager : MonoBehaviour
 {
+    public static PetInteractionManager Instance; // Singleton instance
+
     public enum PetState
     {
         Idle,
@@ -25,8 +27,8 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Material playfulMaterial;
 
-    [SerializeField]
-    private Renderer balloonRenderer; // Assign this via the Inspector
+    private Renderer petRenderer; // Renderer of the instantiated pet
+    private GameObject currentPet; // Reference to the current pet
 
     [SerializeField]
     private Text petStateText; // Assign this via the Inspector
@@ -35,24 +37,34 @@ public class PetInteractionManager : MonoBehaviour
 
     private void Awake()
     {
-        // Ensure Renderer components and materials are assigned
-        if (balloonRenderer == null)
+        if (Instance == null)
         {
-            Debug.LogError("Balloon Renderer component is missing. Assign it in the Inspector.");
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
-        if (idleMaterial == null || happyMaterial == null || sadMaterial == null || hungryMaterial == null ||
-            snackMaterial == null || playfulMaterial == null)
+        if (petStateText == null)
         {
-            Debug.LogError("One or more materials are missing. Please assign all materials in the Inspector.");
+            Debug.LogError("Pet State Text UI component is missing.");
         }
+    }
 
+    public void SetPet(GameObject pet)
+    {
+        currentPet = pet;
+        petRenderer = pet.GetComponent<Renderer>();
+        if (petRenderer == null)
+        {
+            Debug.LogError("Pet does not have a Renderer component.");
+        }
         SetRandomInitialState();
     }
 
     private void SetRandomInitialState()
     {
-        // Set a random initial state
         currentState = (PetState)Random.Range(0, System.Enum.GetValues(typeof(PetState)).Length);
         Debug.Log("Initial state set to: " + currentState);
         UpdatePetStateUI();
@@ -61,7 +73,8 @@ public class PetInteractionManager : MonoBehaviour
 
     private void SetMaterialForCurrentState()
     {
-        // Log the state being set
+        if (petRenderer == null) return;
+
         Debug.Log("Setting material for state: " + currentState);
         switch (currentState)
         {
@@ -77,33 +90,20 @@ public class PetInteractionManager : MonoBehaviour
             case PetState.Hungry:
                 SetMaterial(hungryMaterial);
                 break;
-            default:
-                Debug.LogError("Unhandled PetState: " + currentState);
-                break;
         }
     }
 
     private void SetMaterial(Material material)
     {
-        if (balloonRenderer == null)
+        if (petRenderer != null && material != null)
         {
-            Debug.LogError("One or more Renderer components are missing.");
-            return;
+            petRenderer.material = material;
+            Debug.Log("Material set to: " + material.name);
         }
-        if (material == null)
+        else
         {
-            Debug.LogError("Material is missing.");
-            return;
+            Debug.LogError("Material or Renderer is missing.");
         }
-
-        // Check if the material is applied correctly
-        Debug.Log("Applying material: " + material.name);
-        // Ensure materials are not null
-        if (balloonRenderer.material == null)
-        {
-            Debug.LogError("Renderer material is null.");
-        }
-        balloonRenderer.material = material;
     }
 
     public void GiveSnack()
@@ -114,12 +114,15 @@ public class PetInteractionManager : MonoBehaviour
 
     private IEnumerator GiveSnackRoutine()
     {
-        Debug.Log("Starting GiveSnackRoutine.");
+        if (petRenderer == null) yield break;
+
+        Debug.Log("GiveSnackRoutine started.");
         SetMaterial(snackMaterial);
         yield return new WaitForSeconds(2);
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
+        Debug.Log("GiveSnackRoutine completed.");
     }
 
     public void Play()
@@ -130,12 +133,15 @@ public class PetInteractionManager : MonoBehaviour
 
     private IEnumerator PlayRoutine()
     {
-        Debug.Log("Starting PlayRoutine.");
+        if (petRenderer == null) yield break;
+
+        Debug.Log("PlayRoutine started.");
         SetMaterial(playfulMaterial);
         yield return new WaitForSeconds(2);
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
+        Debug.Log("PlayRoutine completed.");
     }
 
     private void UpdatePetStateUI()

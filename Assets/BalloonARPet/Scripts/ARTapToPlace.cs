@@ -70,6 +70,7 @@ public class ARTapToPlace : MonoBehaviour
             {
                 // If no object has been spawned yet, instantiate the prefab at the hit point
                 spawnedObject = Instantiate(refToPrefab, hitPose.position, hitPose.rotation);
+                PetInteractionManager.Instance.SetPet(spawnedObject); // Notify PetInteractionManager
             }
             else
             {

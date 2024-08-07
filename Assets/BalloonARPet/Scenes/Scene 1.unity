@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 226.5, y: 47.6}
+  m_AnchoredPosition: {x: 226.5, y: 451}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &480743338
@@ -1392,7 +1392,6 @@ MonoBehaviour:
   hungryMaterial: {fileID: 2100000, guid: b95d614024ac66f4f9058d03493a93f0, type: 2}
   snackMaterial: {fileID: 2100000, guid: 2d7adbb597eb4a74f9a3d8877ed1237a, type: 2}
   playfulMaterial: {fileID: 2100000, guid: 3b05cb8d00b82cb40a12717fc487b1db, type: 2}
-  balloonRenderer: {fileID: 2369924708378200573, guid: 94cff7c64ce43c54381c8227490c5a74, type: 3}
   petStateText: {fileID: 1674415072}
 --- !u!4 &1581549892
 Transform:
@@ -1563,7 +1562,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 241, y: 211}
+  m_AnchoredPosition: {x: 241, y: 614.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1693415946
@@ -1628,7 +1627,7 @@ RectTransform:
   m_GameObject: {fileID: 1756814729}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.67736, y: 1.6354299, z: 3.4253}
+  m_LocalScale: {x: 3.418202, y: 1.5201746, z: 3.1839051}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 716909812}
@@ -1636,7 +1635,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 226.5, y: -136}
+  m_AnchoredPosition: {x: 226.5, y: 281}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1756814731
@@ -1679,7 +1678,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 480743339}
+  m_TargetGraphic: {fileID: 1756814732}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
