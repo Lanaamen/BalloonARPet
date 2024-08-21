@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using AugmentedRealityCourse;
 
 public class PetInteractionManager : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class PetInteractionManager : MonoBehaviour
 
         if (petStateText == null)
         {
-            Debug.LogError("Pet State Text UI component is missing.");
+            DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
     }
 
@@ -58,7 +59,7 @@ public class PetInteractionManager : MonoBehaviour
         petRenderer = pet.GetComponent<Renderer>();
         if (petRenderer == null)
         {
-            Debug.LogError("Pet does not have a Renderer component.");
+            DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
         }
         SetRandomInitialState();
     }
@@ -66,7 +67,7 @@ public class PetInteractionManager : MonoBehaviour
     private void SetRandomInitialState()
     {
         currentState = (PetState)Random.Range(0, System.Enum.GetValues(typeof(PetState)).Length);
-        Debug.Log("Initial state set to: " + currentState);
+        DebugManager.Instance.AddDebugMessage("Initial state set to: " + currentState);
         UpdatePetStateUI();
         SetMaterialForCurrentState();
     }
@@ -75,7 +76,7 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petRenderer == null) return;
 
-        Debug.Log("Setting material for state: " + currentState);
+        DebugManager.Instance.AddDebugMessage("Setting material for state: " + currentState);
         switch (currentState)
         {
             case PetState.Idle:
@@ -98,17 +99,17 @@ public class PetInteractionManager : MonoBehaviour
         if (petRenderer != null && material != null)
         {
             petRenderer.material = material;
-            Debug.Log("Material set to: " + material.name);
+            DebugManager.Instance.AddDebugMessage("Material set to: " + material.name);
         }
         else
         {
-            Debug.LogError("Material or Renderer is missing.");
+            DebugManager.Instance.AddDebugMessage("Material or Renderer is missing.");
         }
     }
 
     public void GiveSnack()
     {
-        Debug.Log("GiveSnack button pressed.");
+        DebugManager.Instance.AddDebugMessage("GiveSnack button pressed.");
         StartCoroutine(GiveSnackRoutine());
     }
 
@@ -116,18 +117,18 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petRenderer == null) yield break;
 
-        Debug.Log("GiveSnackRoutine started.");
+        DebugManager.Instance.AddDebugMessage("GiveSnackRoutine started.");
         SetMaterial(snackMaterial);
         yield return new WaitForSeconds(2);
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
-        Debug.Log("GiveSnackRoutine completed.");
+        DebugManager.Instance.AddDebugMessage("GiveSnackRoutine completed.");
     }
 
     public void Play()
     {
-        Debug.Log("Play button pressed.");
+        DebugManager.Instance.AddDebugMessage("Play button pressed.");
         StartCoroutine(PlayRoutine());
     }
 
@@ -135,13 +136,13 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petRenderer == null) yield break;
 
-        Debug.Log("PlayRoutine started.");
+        DebugManager.Instance.AddDebugMessage("PlayRoutine started.");
         SetMaterial(playfulMaterial);
         yield return new WaitForSeconds(2);
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
-        Debug.Log("PlayRoutine completed.");
+        DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
     private void UpdatePetStateUI()
@@ -149,11 +150,11 @@ public class PetInteractionManager : MonoBehaviour
         if (petStateText != null)
         {
             petStateText.text = "Pet State: " + currentState.ToString();
-            Debug.Log("Pet state UI updated to: " + currentState);
+            DebugManager.Instance.AddDebugMessage("Pet state UI updated to: " + currentState);
         }
         else
         {
-            Debug.LogError("Pet State Text UI component is missing.");
+            DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
     }
 }
