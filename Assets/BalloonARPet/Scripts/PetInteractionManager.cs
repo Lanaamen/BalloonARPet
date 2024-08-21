@@ -28,7 +28,7 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Material playfulMaterial;
 
-    private Renderer petRenderer; // Renderer of the instantiated pet
+    private MeshRenderer petRenderer; // Renderer of the instantiated pet
     private GameObject currentPet; // Reference to the current pet
 
     [SerializeField]
@@ -56,7 +56,8 @@ public class PetInteractionManager : MonoBehaviour
     public void SetPet(GameObject pet)
     {
         currentPet = pet;
-        petRenderer = pet.GetComponent<Renderer>();
+        MeshRenderer [] temp = pet.GetComponentsInChildren<MeshRenderer>();
+        petRenderer = temp [0];
         if (petRenderer == null)
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
