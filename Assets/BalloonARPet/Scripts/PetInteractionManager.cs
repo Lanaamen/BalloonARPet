@@ -34,6 +34,9 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Text petStateText; // Assign this via the Inspector
 
+    [SerializeField]
+    private float fadeDuration = 1.0f; // Duration of the fade in seconds
+
     private PetState currentState;
 
     private void Awake()
@@ -56,8 +59,8 @@ public class PetInteractionManager : MonoBehaviour
     public void SetPet(GameObject pet)
     {
         currentPet = pet;
-        MeshRenderer [] temp = pet.GetComponentsInChildren<MeshRenderer>();
-        petRenderer = temp [0];
+        MeshRenderer[] temp = pet.GetComponentsInChildren<MeshRenderer>();
+        petRenderer = temp[0];
         if (petRenderer == null)
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
@@ -95,17 +98,35 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
-    private void SetMaterial(Material material)
+    private void SetMaterial(Material newMaterial)
     {
-        if (petRenderer != null && material != null)
+        if (petRenderer != null && newMaterial != null)
         {
-            petRenderer.material = material;
-            DebugManager.Instance.AddDebugMessage("Material set to: " + material.name);
+            StartCoroutine(FadeToMaterial(newMaterial));
+            DebugManager.Instance.AddDebugMessage("Material fading to: " + newMaterial.name);
         }
         else
         {
             DebugManager.Instance.AddDebugMessage("Material or Renderer is missing.");
         }
+    }
+
+    private IEnumerator FadeToMaterial(Material targetMaterial)
+    {
+        Color startColor = petRenderer.material.color;
+        Color endColor = targetMaterial.color;
+
+        Material currentMaterial = petRenderer.material;
+
+        for (float t = 0; t < 1; t += Time.deltaTime / fadeDuration)
+        {
+            Color newColor = Color.Lerp(startColor, endColor, t);
+            currentMaterial.color = newColor;
+            yield return null;
+        }
+
+        currentMaterial.color = endColor;
+        petRenderer.material = targetMaterial;
     }
 
     public void GiveSnack()
