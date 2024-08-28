@@ -50,10 +50,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bc0c7d85d329b0847a452ed7318b4de1, type: 3}
       propertyPath: m_Name
-      value: Balloon-vand
+      value: Balloon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bc0c7d85d329b0847a452ed7318b4de1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7772256585490117161}
   m_SourcePrefab: {fileID: 100100000, guid: bc0c7d85d329b0847a452ed7318b4de1, type: 3}
+--- !u!1 &5455597387263198697 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bc0c7d85d329b0847a452ed7318b4de1, type: 3}
+  m_PrefabInstance: {fileID: 5149660817910823096}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7772256585490117161
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5455597387263198697}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0f8bca3ed6de0574fb00b8d66f98c001, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
