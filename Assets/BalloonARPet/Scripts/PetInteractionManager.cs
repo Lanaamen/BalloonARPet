@@ -32,7 +32,7 @@ public class PetInteractionManager : MonoBehaviour
     private GameObject currentPet; // Reference to the current pet
 
     [SerializeField]
-    private Text petStateText; // Assign this via the Inspector
+    private Text petStateText; //UI texten för PetState
 
     [SerializeField]
     private float fadeDuration = 1.0f; // Duration of the fade in seconds
@@ -56,6 +56,7 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    //Anger Balongen som pet
     public void SetPet(GameObject pet)
     {
         currentPet = pet;
@@ -65,6 +66,7 @@ public class PetInteractionManager : MonoBehaviour
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
         }
+        //initierar funktionen som randomiserar ett state
         SetRandomInitialState();
     }
 
