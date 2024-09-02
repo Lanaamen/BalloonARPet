@@ -32,12 +32,14 @@ public class PetInteractionManager : MonoBehaviour
     private GameObject currentPet; // Reference to the current pet
 
     [SerializeField]
-    private Text petStateText; //UI texten för PetState
+    private Text petStateText; // UI för PetState
 
     [SerializeField]
-    private float fadeDuration = 1.0f; // Duration of the fade in seconds
+    private float fadeDuration = 1.0f; // varighetsläng i sekunder för fade
 
     private PetState currentState;
+
+    private Animator petAnimator; // Animator komponent för att hantera animationer
 
     private void Awake()
     {
@@ -56,17 +58,28 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
-    //Anger Balongen som pet
+    // Ange Pet och initialera animationer
     public void SetPet(GameObject pet)
     {
+        //DebugManager.Instance.AddDebugMessage("PET : " + pet.name);
+        //DebugManager.Instance.AddDebugMessage("CHILD 1st : " + pet.transform.GetChild(0).name);
         currentPet = pet;
-        MeshRenderer[] temp = pet.GetComponentsInChildren<MeshRenderer>();
+        MeshRenderer[] temp = pet.transform.GetChild(0).GetComponentsInChildren<MeshRenderer>();
         petRenderer = temp[0];
+
+        // Get the Animator component from the pet
+        petAnimator = pet.transform.GetChild(0).GetComponent<Animator>();
+        if (petAnimator == null)
+        {
+            DebugManager.Instance.AddDebugMessage("Pet does not have an Animator component.");
+        }
+
         if (petRenderer == null)
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
         }
-        //initierar funktionen som randomiserar ett state
+        
+        // Initialize the function to randomize a state
         SetRandomInitialState();
     }
 
@@ -76,6 +89,7 @@ public class PetInteractionManager : MonoBehaviour
         DebugManager.Instance.AddDebugMessage("Initial state set to: " + currentState);
         UpdatePetStateUI();
         SetMaterialForCurrentState();
+        PlayAnimationForCurrentState();
     }
 
     private void SetMaterialForCurrentState()
@@ -143,10 +157,15 @@ public class PetInteractionManager : MonoBehaviour
 
         DebugManager.Instance.AddDebugMessage("GiveSnackRoutine started.");
         SetMaterial(snackMaterial);
+
+        PlayAnimation("GiveSnack"); // Play the "GiveSnack" animation
+
         yield return new WaitForSeconds(2);
+
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
+        PlayAnimationForCurrentState(); // Play the happy animation after "GiveSnack"
         DebugManager.Instance.AddDebugMessage("GiveSnackRoutine completed.");
     }
 
@@ -162,10 +181,15 @@ public class PetInteractionManager : MonoBehaviour
 
         DebugManager.Instance.AddDebugMessage("PlayRoutine started.");
         SetMaterial(playfulMaterial);
+
+        PlayAnimation("Play"); // Play the playing animation
+
         yield return new WaitForSeconds(2);
+
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
+        PlayAnimationForCurrentState(); // Play the happy animation after playing
         DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
@@ -179,6 +203,41 @@ public class PetInteractionManager : MonoBehaviour
         else
         {
             DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
+        }
+    }
+
+    private void PlayAnimationForCurrentState()
+    {
+        if (petAnimator == null) return;
+
+        DebugManager.Instance.AddDebugMessage("Playing animation for state: " + currentState);
+        switch (currentState)
+        {
+            case PetState.Idle:
+                PlayAnimation("Idle");
+                break;
+            case PetState.Happy:
+                PlayAnimation("Happy");
+                break;
+            case PetState.Sad:
+                PlayAnimation("Sad");
+                break;
+            case PetState.Hungry:
+                PlayAnimation("Hungry");
+                break;
+        }
+    }
+
+    private void PlayAnimation(string animationName)
+    {
+        if (petAnimator != null)
+        {
+            petAnimator.Play(animationName);
+            DebugManager.Instance.AddDebugMessage("Playing animation: " + animationName);
+        }
+        else
+        {
+            DebugManager.Instance.AddDebugMessage("Animator component is missing.");
         }
     }
 }
