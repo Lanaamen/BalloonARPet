@@ -4,28 +4,23 @@ using UnityEngine.UI;
 public class QuitGameManager : MonoBehaviour
 {
     [SerializeField]
-    private Button quitButton; // Reference to the UI Button
+    private Button quitButton; // Referens till UI-knappen(quit)
 
     private void Start()
     {
         if (quitButton != null)
         {
-            quitButton.onClick.AddListener(QuitGame);
+            quitButton.onClick.AddListener(QuitGame); // Lägg till en lyssnare för knapptryckningen
         }
-        else
-        {
-            Debug.LogError("Quit Button is not assigned in the Inspector.");
-        }
+       
     }
 
     public void QuitGame()
     {
-        Debug.Log("Quit Game button clicked.");
-
         #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false; // Stoppa spelet i Unity Editor
         #else
-            Application.Quit();
+            Application.Quit(); 
         #endif
     }
 }

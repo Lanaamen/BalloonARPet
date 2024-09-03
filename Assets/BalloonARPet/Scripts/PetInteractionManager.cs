@@ -28,18 +28,32 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Material playfulMaterial;
 
+    [SerializeField]
+    private AudioClip happySound;
+    [SerializeField]
+    private AudioClip sadSound;
+    [SerializeField]
+    private AudioClip hungrySound;
+    [SerializeField]
+    private AudioClip snackSound;
+    [SerializeField]
+    private AudioClip playfulSound;
+
     private MeshRenderer petRenderer; // Renderer of the instantiated pet
     private GameObject currentPet; // Reference to the current pet
 
     [SerializeField]
-    private Text petStateText; // UI för PetState
+    private Text petStateText; // UI for PetState
 
     [SerializeField]
-    private float fadeDuration = 1.0f; // varighetsläng i sekunder för fade
+    private float fadeDuration = 1.0f; // Duration for fade in seconds
 
     private PetState currentState;
 
-    private Animator petAnimator; // Animator komponent för att hantera animationer
+    private Animator petAnimator; // Animator component for handling animations
+
+    [SerializeField]
+    private AudioSource petAudioSource; // AudioSource component for sound playback
 
     public Button happyButton;
     public Button hungryButton;
@@ -62,15 +76,14 @@ public class PetInteractionManager : MonoBehaviour
             DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
 
-         // Add listeners to the buttons
+        // Add listeners to the buttons
         if (happyButton != null) happyButton.onClick.AddListener(SetHappyState);
         if (hungryButton != null) hungryButton.onClick.AddListener(SetHungryState);
         if (sadButton != null) sadButton.onClick.AddListener(SetSadState);
         if (idleButton != null) idleButton.onClick.AddListener(SetIdleState);
     }
 
-
-       // Setters for different states
+    // Setters for different states
     public void SetHappyState()
     {
         SetPetState(PetState.Happy);
@@ -97,9 +110,10 @@ public class PetInteractionManager : MonoBehaviour
         UpdatePetStateUI();
         SetMaterialForCurrentState();
         PlayAnimationForCurrentState(); // Play the animation for the new state
+        PlaySoundForCurrentState(); // Play the sound for the new state
     }
-    
-    // Ange Pet och initialera animationer
+
+ // Ange Pet och initialera animationer
     public void SetPet(GameObject pet)
     {
         //DebugManager.Instance.AddDebugMessage("PET : " + pet.name);
@@ -124,6 +138,7 @@ public class PetInteractionManager : MonoBehaviour
         SetRandomInitialState();
     }
 
+
     private void SetRandomInitialState()
     {
         currentState = (PetState)Random.Range(0, System.Enum.GetValues(typeof(PetState)).Length);
@@ -131,6 +146,7 @@ public class PetInteractionManager : MonoBehaviour
         UpdatePetStateUI();
         SetMaterialForCurrentState();
         PlayAnimationForCurrentState();
+        PlaySoundForCurrentState();
     }
 
     private void SetMaterialForCurrentState()
@@ -200,6 +216,7 @@ public class PetInteractionManager : MonoBehaviour
         SetMaterial(snackMaterial);
 
         PlayAnimation("GiveSnack"); // Play the "GiveSnack" animation
+        PlaySound(snackSound); // Play the snack sound
 
         yield return new WaitForSeconds(4);
 
@@ -207,6 +224,7 @@ public class PetInteractionManager : MonoBehaviour
         currentState = PetState.Happy;
         UpdatePetStateUI();
         PlayAnimationForCurrentState(); // Play the happy animation after "GiveSnack"
+        PlaySoundForCurrentState(); // Play the happy sound
         DebugManager.Instance.AddDebugMessage("GiveSnackRoutine completed.");
     }
 
@@ -224,6 +242,7 @@ public class PetInteractionManager : MonoBehaviour
         SetMaterial(playfulMaterial);
 
         PlayAnimation("Play"); // Play the playing animation
+        PlaySound(playfulSound); // Play the playful sound
 
         yield return new WaitForSeconds(4);
 
@@ -231,6 +250,7 @@ public class PetInteractionManager : MonoBehaviour
         currentState = PetState.Happy;
         UpdatePetStateUI();
         PlayAnimationForCurrentState(); // Play the happy animation after playing
+        PlaySoundForCurrentState(); // Play the happy sound
         DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
@@ -269,6 +289,25 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    private void PlaySoundForCurrentState()
+    {
+        if (petAudioSource == null) return;
+
+        DebugManager.Instance.AddDebugMessage("Playing sound for state: " + currentState);
+        switch (currentState)
+        {
+            case PetState.Happy:
+                PlaySound(happySound);
+                break;
+            case PetState.Sad:
+                PlaySound(sadSound);
+                break;
+            case PetState.Hungry:
+                PlaySound(hungrySound);
+                break;
+        }
+    }
+
     private void PlayAnimation(string animationName)
     {
         if (petAnimator != null)
@@ -279,6 +318,19 @@ public class PetInteractionManager : MonoBehaviour
         else
         {
             DebugManager.Instance.AddDebugMessage("Animator component is missing.");
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (petAudioSource != null && clip != null)
+        {
+            petAudioSource.PlayOneShot(clip);
+            DebugManager.Instance.AddDebugMessage("Playing sound: " + clip.name);
+        }
+        else
+        {
+            DebugManager.Instance.AddDebugMessage("AudioSource or AudioClip is missing.");
         }
     }
 }
