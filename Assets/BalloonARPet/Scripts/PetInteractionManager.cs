@@ -41,6 +41,11 @@ public class PetInteractionManager : MonoBehaviour
 
     private Animator petAnimator; // Animator komponent för att hantera animationer
 
+    public Button happyButton;
+    public Button hungryButton;
+    public Button sadButton;
+    public Button idleButton;
+
     private void Awake()
     {
         if (Instance == null)
@@ -56,8 +61,44 @@ public class PetInteractionManager : MonoBehaviour
         {
             DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
+
+         // Add listeners to the buttons
+        if (happyButton != null) happyButton.onClick.AddListener(SetHappyState);
+        if (hungryButton != null) hungryButton.onClick.AddListener(SetHungryState);
+        if (sadButton != null) sadButton.onClick.AddListener(SetSadState);
+        if (idleButton != null) idleButton.onClick.AddListener(SetIdleState);
     }
 
+
+       // Setters for different states
+    public void SetHappyState()
+    {
+        SetPetState(PetState.Happy);
+    }
+
+    public void SetHungryState()
+    {
+        SetPetState(PetState.Hungry);
+    }
+
+    public void SetSadState()
+    {
+        SetPetState(PetState.Sad);
+    }
+
+    public void SetIdleState()
+    {
+        SetPetState(PetState.Idle);
+    }
+
+    private void SetPetState(PetState newState)
+    {
+        currentState = newState;
+        UpdatePetStateUI();
+        SetMaterialForCurrentState();
+        PlayAnimationForCurrentState(); // Play the animation for the new state
+    }
+    
     // Ange Pet och initialera animationer
     public void SetPet(GameObject pet)
     {
