@@ -201,7 +201,7 @@ public class PetInteractionManager : MonoBehaviour
 
         PlayAnimation("GiveSnack"); // Play the "GiveSnack" animation
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
 
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
@@ -225,7 +225,7 @@ public class PetInteractionManager : MonoBehaviour
 
         PlayAnimation("Play"); // Play the playing animation
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
 
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
