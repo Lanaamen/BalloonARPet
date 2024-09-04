@@ -14,7 +14,7 @@ public class PetInteractionManager : MonoBehaviour
         Sad,
         Hungry
     }
-
+    //Referens till Ballong-materialen
     [SerializeField]
     private Material idleMaterial;
     [SerializeField]
@@ -28,6 +28,7 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Material playfulMaterial;
 
+    //Referens till Ballong-ljuden
     [SerializeField]
     private AudioClip happySound;
     [SerializeField]
@@ -39,22 +40,22 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private AudioClip playfulSound;
 
-    private MeshRenderer petRenderer; // Renderer of the instantiated pet
-    private GameObject currentPet; // Reference to the current pet
+    private MeshRenderer petRenderer; // MeshRenderer för den instansierade balongen
+    private GameObject currentPet; // Referens till de aktiva djuret
 
     [SerializeField]
-    private Text petStateText; // UI for PetState
+    private Text petStateText; // UI för PetState
 
     [SerializeField]
-    private float fadeDuration = 1.0f; // Duration for fade in seconds
+    private float fadeDuration = 1.0f; // Varighet i sekunder för Material-faden
+
+    [SerializeField]
+    private AudioSource petAudioSource; // AudioSource-komponent för ljudhantering
 
     private PetState currentState;
+    private Animator petAnimator; // Animator-komponent för att hantera animationer
 
-    private Animator petAnimator; // Animator component for handling animations
-
-    [SerializeField]
-    private AudioSource petAudioSource; // AudioSource component for sound playback
-
+    //Referens till State-knapparna
     public Button happyButton;
     public Button hungryButton;
     public Button sadButton;
@@ -76,14 +77,14 @@ public class PetInteractionManager : MonoBehaviour
             DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
 
-        // Add listeners to the buttons
+        // Lägger till lyssnare till knapparna
         if (happyButton != null) happyButton.onClick.AddListener(SetHappyState);
         if (hungryButton != null) hungryButton.onClick.AddListener(SetHungryState);
         if (sadButton != null) sadButton.onClick.AddListener(SetSadState);
         if (idleButton != null) idleButton.onClick.AddListener(SetIdleState);
     }
 
-    // Setters for different states
+    // Funktioner för att ange de olika tillstånden
     public void SetHappyState()
     {
         SetPetState(PetState.Happy);
@@ -109,21 +110,21 @@ public class PetInteractionManager : MonoBehaviour
         currentState = newState;
         UpdatePetStateUI();
         SetMaterialForCurrentState();
-        PlayAnimationForCurrentState(); // Play the animation for the new state
-        PlaySoundForCurrentState(); // Play the sound for the new state
+        PlayAnimationForCurrentState(); // Spelar upp animationen för de aktuella state:t
+        PlaySoundForCurrentState(); // Spelar upp ljudet för de aktuella state:t
     }
 
- // Ange Pet och initialera animationer
+    // Initialiserar de aktuella objektet och dess komponenter
     public void SetPet(GameObject pet)
     {
-        //DebugManager.Instance.AddDebugMessage("PET : " + pet.name);
-        //DebugManager.Instance.AddDebugMessage("CHILD 1st : " + pet.transform.GetChild(0).name);
         currentPet = pet;
         MeshRenderer[] temp = pet.transform.GetChild(0).GetComponentsInChildren<MeshRenderer>();
-        petRenderer = temp[0];
+        petRenderer = temp.Length > 0 ? temp[0] : null;
 
-        // Get the Animator component from the pet
+        // Hämtar animation-komponenten från gameobjektet
         petAnimator = pet.transform.GetChild(0).GetComponent<Animator>();
+        // Hämtar ljud-komponenten från samma objekt
+        petAudioSource = pet.transform.GetChild(0).GetComponent<AudioSource>();
         if (petAnimator == null)
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have an Animator component.");
@@ -133,11 +134,15 @@ public class PetInteractionManager : MonoBehaviour
         {
             DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
         }
-        
-        // Initialize the function to randomize a state
+
+        if (petAudioSource == null)
+        {
+            DebugManager.Instance.AddDebugMessage("Pet does not have an AudioSource component.");
+        }
+
+        // Initialiserar funktionen som randomiserar ett state
         SetRandomInitialState();
     }
-
 
     private void SetRandomInitialState()
     {
@@ -215,16 +220,16 @@ public class PetInteractionManager : MonoBehaviour
         DebugManager.Instance.AddDebugMessage("GiveSnackRoutine started.");
         SetMaterial(snackMaterial);
 
-        PlayAnimation("GiveSnack"); // Play the "GiveSnack" animation
-        PlaySound(snackSound); // Play the snack sound
+        PlayAnimation("GiveSnack"); // Spelar upp Give-Snack-Animationen
+        PlaySound(snackSound); // Spelar upp snack-ljudet
 
         yield return new WaitForSeconds(4);
 
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
-        PlayAnimationForCurrentState(); // Play the happy animation after "GiveSnack"
-        PlaySoundForCurrentState(); // Play the happy sound
+        PlayAnimationForCurrentState(); // Spelar upp Happy-animationen efter givesnack
+        PlaySoundForCurrentState(); // Spelar upp happy-ljudet
         DebugManager.Instance.AddDebugMessage("GiveSnackRoutine completed.");
     }
 
@@ -241,19 +246,20 @@ public class PetInteractionManager : MonoBehaviour
         DebugManager.Instance.AddDebugMessage("PlayRoutine started.");
         SetMaterial(playfulMaterial);
 
-        PlayAnimation("Play"); // Play the playing animation
-        PlaySound(playfulSound); // Play the playful sound
+        PlayAnimation("Play"); // Spelar upp play-animationen
+        PlaySound(playfulSound); // Spelar upp play-ljudet
 
         yield return new WaitForSeconds(4);
 
         SetMaterial(happyMaterial);
         currentState = PetState.Happy;
         UpdatePetStateUI();
-        PlayAnimationForCurrentState(); // Play the happy animation after playing
-        PlaySoundForCurrentState(); // Play the happy sound
+        PlayAnimationForCurrentState(); // Spelar happy animationen efter
+        PlaySoundForCurrentState(); // spelar upp happy-ljudet
         DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
+    //Uppdaterar PetUIState till aktuella state:t
     private void UpdatePetStateUI()
     {
         if (petStateText != null)

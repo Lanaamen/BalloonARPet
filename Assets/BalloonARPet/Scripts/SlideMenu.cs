@@ -3,33 +3,33 @@ using UnityEngine;
 
 public class SlideMenu : MonoBehaviour
 {
-    public RectTransform menuPanel; // Assign your menu panel here
-    public float slideDuration = 0.5f; // Duration of the slide animation
-    private bool isMenuVisible = false; // To track the current state
+    public RectTransform menuPanel; // Referens till panelen
+    public float slideDuration = 0.5f; // Meny-animationens längd
+    private bool isMenuVisible = false; // Bool för menys tillstånd
 
     private Vector2 offScreenPosition;
     private Vector2 onScreenPosition;
 
     private void Start()
     {
-        // Calculate off-screen and on-screen positions based on the panel's height
+        // Kalkylerar off-screen och on-screen positionen baserat på panelens höjd
         float panelHeight = menuPanel.rect.height;
-        // Set off-screen position to be +408 on the y-axis
+        // Sätter off-screen positionen till +408 på y-axeln
         offScreenPosition = new Vector2(menuPanel.anchoredPosition.x, 408);
-        // Set on-screen position to be at 0 on the y-axis
+        // Sätter on-screen positionen till 0 på y-axlen
         onScreenPosition = new Vector2(menuPanel.anchoredPosition.x, 0);
 
-        // Initially move the panel to the off-screen position
+        // Flyttar menypanelen till offscreenPosition till en början
         menuPanel.anchoredPosition = offScreenPosition;
     }
 
     public void ToggleMenu()
     {
-        // Toggle the menu visibility
+        // Växlar menyns synlighet
         isMenuVisible = !isMenuVisible;
 
-        StopAllCoroutines(); // Stop any ongoing animations
-        // Start the sliding animation
+        StopAllCoroutines(); // Stopppar all pågående animation
+        // Påbörjar meny-animationen
         StartCoroutine(SlideMenuCoroutine(isMenuVisible ? onScreenPosition : offScreenPosition));
     }
 
@@ -45,6 +45,6 @@ public class SlideMenu : MonoBehaviour
             yield return null;
         }
 
-        menuPanel.anchoredPosition = targetPosition; // Ensure it's exactly at the target position
+        menuPanel.anchoredPosition = targetPosition; // Försäkrar att panelen är exakt på målets position
     }
 }
