@@ -4,23 +4,62 @@ using UnityEngine.UI;
 public class QuitGameManager : MonoBehaviour
 {
     [SerializeField]
-    private Button quitButton; // Referens till UI-knappen(quit)
+    private Button quitButton;
+
+    [SerializeField]
+    private GameObject confirmationPanel;
+
+    [SerializeField]
+    private Button yesButton;
+
+    [SerializeField]
+    private Button noButton;
 
     private void Start()
     {
         if (quitButton != null)
         {
-            quitButton.onClick.AddListener(QuitGame); // Lägg till en lyssnare för knapptryckningen
+            quitButton.onClick.AddListener(OnQuitButtonClick);
         }
-       
+
+        if (yesButton != null)
+        {
+            yesButton.onClick.AddListener(QuitGame);
+        }
+
+        if (noButton != null)
+        {
+            noButton.onClick.AddListener(CloseConfirmationPanel);
+        }
+
+        if (confirmationPanel != null)
+        {
+            confirmationPanel.SetActive(false);
+        }
+    }
+
+    public void OnQuitButtonClick()
+    {
+        if (confirmationPanel != null)
+        {
+            confirmationPanel.SetActive(true);
+        }
     }
 
     public void QuitGame()
     {
         #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false; // Stoppa spelet i Unity Editor
+            UnityEditor.EditorApplication.isPlaying = false;
         #else
-            Application.Quit(); 
+            Application.Quit();
         #endif
+    }
+
+    public void CloseConfirmationPanel()
+    {
+        if (confirmationPanel != null)
+        {
+            confirmationPanel.SetActive(false);
+        }
     }
 }
