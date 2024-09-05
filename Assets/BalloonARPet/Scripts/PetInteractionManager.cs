@@ -159,14 +159,22 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
-    private void SetMaterial(Material newMaterial)
+  private void SetMaterial(Material newMaterial, bool useFade = true)
+{
+    if (petRenderer != null && newMaterial != null)
     {
-        if (petRenderer != null && newMaterial != null)
+        if (useFade)
         {
             StartCoroutine(FadeToMaterial(newMaterial));
-            DebugManager.Instance.AddDebugMessage("Material fading to: " + newMaterial.name);
+        }
+        else
+        {
+            // Immediately set the material without fading
+            petRenderer.material = newMaterial;
         }
     }
+}
+
 
     private IEnumerator FadeToMaterial(Material targetMaterial)
     {
@@ -193,45 +201,50 @@ public class PetInteractionManager : MonoBehaviour
 
     private IEnumerator GiveSnackRoutine()
     {
-        if (petRenderer == null) yield break;
+    if (petRenderer == null) yield break;
 
-        DebugManager.Instance.AddDebugMessage("GiveSnackRoutine started.");
-        SetMaterial(snackMaterial);
+    // Set the material without fading for Give Snack
+    SetMaterial(snackMaterial, useFade: false);
 
-        PlayAnimation("GiveSnack"); // Spelar upp Give-Snack-Animationen
-        PlaySound(snackSound); // Spelar upp snack-ljudet
+    PlayAnimation("GiveSnack"); // Play the Give-Snack animation
+    PlaySound(snackSound); // Play the snack sound
 
-        yield return new WaitForSeconds(4);
+    yield return new WaitForSeconds(4);
 
-        SetMaterial(happyMaterial);
-        currentState = PetState.Happy;
-        UpdatePetStateUI();
-        PlayAnimationForCurrentState(); // Spelar upp Happy-animationen efter givesnack
-        PlaySoundForCurrentState(); // Spelar upp happy-ljudet
+    // Set the material to happy without fading after snack
+    SetMaterial(happyMaterial, useFade: false);
+    currentState = PetState.Happy;
+    UpdatePetStateUI();
+    PlayAnimationForCurrentState();
+    PlaySoundForCurrentState();
     }
+
 
     public void Play()
     {
         StartCoroutine(PlayRoutine());
     }
 
-    private IEnumerator PlayRoutine()
-    {
-        if (petRenderer == null) yield break;
+  private IEnumerator PlayRoutine()
+{
+    if (petRenderer == null) yield break;
 
-        SetMaterial(playfulMaterial);
+    // Set the material without fading when playing
+    SetMaterial(playfulMaterial, useFade: false);
 
-        PlayAnimation("Play"); // Spelar upp play-animationen
-        PlaySound(playfulSound); // Spelar upp play-ljudet
+    PlayAnimation("Play"); // Spelar upp play-animationen
+    PlaySound(playfulSound); // Spelar upp play-ljudet
 
-        yield return new WaitForSeconds(4);
+    yield return new WaitForSeconds(4);
 
-        SetMaterial(happyMaterial);
-        currentState = PetState.Happy;
-        UpdatePetStateUI();
-        PlayAnimationForCurrentState(); // Spelar happy animationen efter
-        PlaySoundForCurrentState(); // spelar upp happy-ljudet
-    }
+    // Set the material to happy after play, you can decide if you want fading or not here
+    SetMaterial(happyMaterial, useFade: false);
+    currentState = PetState.Happy;
+    UpdatePetStateUI();
+    PlayAnimationForCurrentState(); // Spelar happy animationen efter
+    PlaySoundForCurrentState(); // Spelar upp happy-ljudet
+}
+
 
     // Uppdaterar PetUIState till aktuella state:t
     private void UpdatePetStateUI()
