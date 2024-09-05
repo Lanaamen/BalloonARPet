@@ -14,7 +14,7 @@ public class PetInteractionManager : MonoBehaviour
         Sad,
         Hungry
     }
-    //Referens till Ballong-materialen
+    // Referens till Ballong-materialen
     [SerializeField]
     private Material idleMaterial;
     [SerializeField]
@@ -28,7 +28,7 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private Material playfulMaterial;
 
-    //Referens till Ballong-ljuden
+    // Referens till Ballong-ljuden
     [SerializeField]
     private AudioClip happySound;
     [SerializeField]
@@ -39,6 +39,8 @@ public class PetInteractionManager : MonoBehaviour
     private AudioClip snackSound;
     [SerializeField]
     private AudioClip playfulSound;
+    [SerializeField]
+    private AudioClip popSound;
 
     private MeshRenderer petRenderer; // MeshRenderer för den instansierade balongen
     private GameObject currentPet; // Referens till de aktiva djuret
@@ -55,7 +57,7 @@ public class PetInteractionManager : MonoBehaviour
     private PetState currentState;
     private Animator petAnimator; // Animator-komponent för att hantera animationer
 
-    //Referens till State-knapparna
+    // Referens till State-knapparna
     public Button happyButton;
     public Button hungryButton;
     public Button sadButton;
@@ -259,7 +261,7 @@ public class PetInteractionManager : MonoBehaviour
         DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
-    //Uppdaterar PetUIState till aktuella state:t
+    // Uppdaterar PetUIState till aktuella state:t
     private void UpdatePetStateUI()
     {
         if (petStateText != null)
@@ -337,6 +339,35 @@ public class PetInteractionManager : MonoBehaviour
         else
         {
             DebugManager.Instance.AddDebugMessage("AudioSource or AudioClip is missing.");
+        }
+    }
+
+    public void PlayPopAnimationAndSound()
+    {
+        if (petAnimator != null)
+        {
+            petAnimator.Play("Pop"); // Replace "Pop" with your actual animation name
+            DebugManager.Instance.AddDebugMessage("Playing pop animation.");
+        }
+
+        if (petAudioSource != null && popSound != null)
+        {
+            petAudioSource.PlayOneShot(popSound);
+            DebugManager.Instance.AddDebugMessage("Playing pop sound.");
+        }
+
+        StartCoroutine(DestroyBalloonAfterAnimation());
+    }
+
+    private IEnumerator DestroyBalloonAfterAnimation()
+    {
+        // Wait for the animation and sound to complete
+        yield return new WaitForSeconds(0.2f); // Adjust based on animation duration
+
+        if (currentPet != null)
+        {
+            Destroy(currentPet); // Destroy the balloon GameObject
+            DebugManager.Instance.AddDebugMessage("Balloon destroyed.");
         }
     }
 }

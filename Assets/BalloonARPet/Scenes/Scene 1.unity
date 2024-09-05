@@ -1460,6 +1460,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780088285}
   m_CullTransparentMesh: 1
+--- !u!1 &782628375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1612563484122047060, guid: ab60028f66e21164f8c057ff1379844c, type: 3}
+  m_PrefabInstance: {fileID: 3355012840744428141}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &782628377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1502,6 +1507,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577749883}
   m_CullTransparentMesh: 1
+--- !u!95 &782628379
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782628375}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b451752afd73fcc42939b740e96ba9a9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &783998797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,8 +2509,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 154, y: -26}
-  m_SizeDelta: {x: 160, y: 54.3007}
+  m_AnchoredPosition: {x: 191.83301, y: -54}
+  m_SizeDelta: {x: 175.2861, y: 99.6132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1016972330
 MonoBehaviour:
@@ -3143,8 +3169,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -162, y: -31.1503}
-  m_SizeDelta: {x: 160, y: 54.3007}
+  m_AnchoredPosition: {x: -154.35696, y: -54}
+  m_SizeDelta: {x: 175.2861, y: 99.6132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1251044594
 MonoBehaviour:
@@ -3757,6 +3783,7 @@ MonoBehaviour:
   hungrySound: {fileID: 8300000, guid: 4501cf5c2f36c6c4c9fa7440c4ba74d8, type: 3}
   snackSound: {fileID: 8300000, guid: 01305b6d1a2769e47b41ca3f1158baf5, type: 3}
   playfulSound: {fileID: 8300000, guid: 46169e7a6bb5af944952a519b2819099, type: 3}
+  popSound: {fileID: 8300000, guid: f08a28b5b3dfe3e49aae5860d19f984b, type: 3}
   petStateText: {fileID: 1674415072}
   fadeDuration: 1
   petAudioSource: {fileID: 40919617}
@@ -3809,6 +3836,7 @@ MonoBehaviour:
   confirmationPanel: {fileID: 1777210910}
   yesButton: {fileID: 1251044594}
   noButton: {fileID: 1016972330}
+  petInteractionManager: {fileID: 1581549891}
 --- !u!114 &1581549895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4431,7 +4459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1777210911
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5800,6 +5828,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1612563484122047060, guid: ab60028f66e21164f8c057ff1379844c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 782628379}
     - targetCorrespondingSourceObject: {fileID: 600804258032087510, guid: ab60028f66e21164f8c057ff1379844c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 40919617}

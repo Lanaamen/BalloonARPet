@@ -15,7 +15,9 @@ MonoImporter:
   - hungrySound: {fileID: 8300000, guid: 4501cf5c2f36c6c4c9fa7440c4ba74d8, type: 3}
   - snackSound: {fileID: 8300000, guid: 01305b6d1a2769e47b41ca3f1158baf5, type: 3}
   - playfulSound: {fileID: 8300000, guid: 46169e7a6bb5af944952a519b2819099, type: 3}
+  - popSound: {fileID: 8300000, guid: f08a28b5b3dfe3e49aae5860d19f984b, type: 3}
   - petStateText: {instanceID: 0}
+  - petAudioSource: {instanceID: 0}
   - happyButton: {instanceID: 0}
   - hungryButton: {instanceID: 0}
   - sadButton: {instanceID: 0}
