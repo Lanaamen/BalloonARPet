@@ -74,11 +74,6 @@ public class PetInteractionManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (petStateText == null)
-        {
-            DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
-        }
-
         // Lägger till lyssnare till knapparna
         if (happyButton != null) happyButton.onClick.AddListener(SetHappyState);
         if (hungryButton != null) hungryButton.onClick.AddListener(SetHungryState);
@@ -127,20 +122,6 @@ public class PetInteractionManager : MonoBehaviour
         petAnimator = pet.transform.GetChild(0).GetComponent<Animator>();
         // Hämtar ljud-komponenten från samma objekt
         petAudioSource = pet.transform.GetChild(0).GetComponent<AudioSource>();
-        if (petAnimator == null)
-        {
-            DebugManager.Instance.AddDebugMessage("Pet does not have an Animator component.");
-        }
-
-        if (petRenderer == null)
-        {
-            DebugManager.Instance.AddDebugMessage("Pet does not have a Renderer component.");
-        }
-
-        if (petAudioSource == null)
-        {
-            DebugManager.Instance.AddDebugMessage("Pet does not have an AudioSource component.");
-        }
 
         // Initialiserar funktionen som randomiserar ett state
         SetRandomInitialState();
@@ -185,10 +166,6 @@ public class PetInteractionManager : MonoBehaviour
             StartCoroutine(FadeToMaterial(newMaterial));
             DebugManager.Instance.AddDebugMessage("Material fading to: " + newMaterial.name);
         }
-        else
-        {
-            DebugManager.Instance.AddDebugMessage("Material or Renderer is missing.");
-        }
     }
 
     private IEnumerator FadeToMaterial(Material targetMaterial)
@@ -211,7 +188,6 @@ public class PetInteractionManager : MonoBehaviour
 
     public void GiveSnack()
     {
-        DebugManager.Instance.AddDebugMessage("GiveSnack button pressed.");
         StartCoroutine(GiveSnackRoutine());
     }
 
@@ -232,12 +208,10 @@ public class PetInteractionManager : MonoBehaviour
         UpdatePetStateUI();
         PlayAnimationForCurrentState(); // Spelar upp Happy-animationen efter givesnack
         PlaySoundForCurrentState(); // Spelar upp happy-ljudet
-        DebugManager.Instance.AddDebugMessage("GiveSnackRoutine completed.");
     }
 
     public void Play()
     {
-        DebugManager.Instance.AddDebugMessage("Play button pressed.");
         StartCoroutine(PlayRoutine());
     }
 
@@ -245,7 +219,6 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petRenderer == null) yield break;
 
-        DebugManager.Instance.AddDebugMessage("PlayRoutine started.");
         SetMaterial(playfulMaterial);
 
         PlayAnimation("Play"); // Spelar upp play-animationen
@@ -258,7 +231,6 @@ public class PetInteractionManager : MonoBehaviour
         UpdatePetStateUI();
         PlayAnimationForCurrentState(); // Spelar happy animationen efter
         PlaySoundForCurrentState(); // spelar upp happy-ljudet
-        DebugManager.Instance.AddDebugMessage("PlayRoutine completed.");
     }
 
     // Uppdaterar PetUIState till aktuella state:t
@@ -267,11 +239,6 @@ public class PetInteractionManager : MonoBehaviour
         if (petStateText != null)
         {
             petStateText.text = "Pet State: " + currentState.ToString();
-            DebugManager.Instance.AddDebugMessage("Pet state UI updated to: " + currentState);
-        }
-        else
-        {
-            DebugManager.Instance.AddDebugMessage("Pet State Text UI component is missing.");
         }
     }
 
@@ -279,7 +246,6 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petAnimator == null) return;
 
-        DebugManager.Instance.AddDebugMessage("Playing animation for state: " + currentState);
         switch (currentState)
         {
             case PetState.Idle:
@@ -301,7 +267,6 @@ public class PetInteractionManager : MonoBehaviour
     {
         if (petAudioSource == null) return;
 
-        DebugManager.Instance.AddDebugMessage("Playing sound for state: " + currentState);
         switch (currentState)
         {
             case PetState.Happy:
@@ -321,39 +286,31 @@ public class PetInteractionManager : MonoBehaviour
         if (petAnimator != null)
         {
             petAnimator.Play(animationName);
-            DebugManager.Instance.AddDebugMessage("Playing animation: " + animationName);
-        }
-        else
-        {
-            DebugManager.Instance.AddDebugMessage("Animator component is missing.");
         }
     }
 
     private void PlaySound(AudioClip clip)
     {
-        if (petAudioSource != null && clip != null)
-        {
-            petAudioSource.PlayOneShot(clip);
-            DebugManager.Instance.AddDebugMessage("Playing sound: " + clip.name);
-        }
-        else
-        {
-            DebugManager.Instance.AddDebugMessage("AudioSource or AudioClip is missing.");
-        }
+        if (petAudioSource == null || clip == null) return;
+
+        // Stop the currently playing sound before playing a new one
+        petAudioSource.Stop();
+
+        // Play the new sound
+        petAudioSource.PlayOneShot(clip);
     }
+
 
     public void PlayPopAnimationAndSound()
     {
         if (petAnimator != null)
         {
             petAnimator.Play("Pop"); // Replace "Pop" with your actual animation name
-            DebugManager.Instance.AddDebugMessage("Playing pop animation.");
         }
 
         if (petAudioSource != null && popSound != null)
         {
             petAudioSource.PlayOneShot(popSound);
-            DebugManager.Instance.AddDebugMessage("Playing pop sound.");
         }
 
         StartCoroutine(DestroyBalloonAfterAnimation());
@@ -367,7 +324,6 @@ public class PetInteractionManager : MonoBehaviour
         if (currentPet != null)
         {
             Destroy(currentPet); // Destroy the balloon GameObject
-            DebugManager.Instance.AddDebugMessage("Balloon destroyed.");
         }
     }
 }
