@@ -145,7 +145,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8406879469312719907}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -202,8 +202,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.435849, b: 0.435849, a: 1}
-      key1: {r: 1, g: 0.435849, b: 0.435849, a: 1}
+      key0: {r: 0.69571376, g: 0.87169814, b: 0.87169814, a: 0}
+      key1: {r: 0.89433956, g: 0.84202915, b: 0.84202915, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
