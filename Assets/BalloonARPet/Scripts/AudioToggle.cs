@@ -3,44 +3,39 @@ using UnityEngine.UI;
 
 public class AudioToggle : MonoBehaviour
 {
-    public Button audioButton;  // Reference to the Button component
-    public Text buttonText;     // Reference to the Text component on the button
+    public Button audioButton;  // Referens till Ljud-knappen
+    public Text buttonText;     // Referens till text-komponenten för knappen
 
-    private bool isMuted = false;  // State to track whether audio is muted or not
+    private bool isMuted = false;  // Bool för att hålla koll på om ljudet är på eller av
 
     private void Start()
     {
-        // Ensure that references are assigned
+        // Säkerställer att referensen till audioButton är satt innan man kopplar eventlyssnaren
         if (audioButton != null)
         {
+            // Lägger till en lyssnare som anropar ToggleAudio-funktionen när knappen klickas
             audioButton.onClick.AddListener(ToggleAudio);
-            UpdateButtonUI();
-        }
-        else
-        {
-            Debug.LogError("AudioButton reference is missing.");
+            UpdateButtonUI(); // Uppdaterar knappens text och ljudstatus vid start
         }
     }
 
+    // Funktion som växlar ljudet mellan på och av
     private void ToggleAudio()
     {
-        isMuted = !isMuted;          // Toggle the muted state
-        UpdateButtonUI();           // Update the button UI and audio state
+        isMuted = !isMuted; // Växlar tillståndet för ljudet (är det av, slås det på och vice versa)
+        UpdateButtonUI(); // Uppdaterar knappens UI (text) och ändrar ljudstatus
     }
 
+    // Funktion som uppdaterar knappens text och ljudnivån i spelet
     private void UpdateButtonUI()
     {
-        // Update the button text based on the muted state
+        // Uppdaterar texten på knappen beroende på om ljudet är på eller av
         if (buttonText != null)
         {
             buttonText.text = isMuted ? "Off" : "On";
         }
-        else
-        {
-            Debug.LogError("ButtonText reference is missing.");
-        }
 
-        // Update audio volume
+         // Ändrar ljudnivån i spelet baserat på isMuted; 0 om ljudet är av, 1 om det är på
         AudioListener.volume = isMuted ? 0 : 1;
     }
 }

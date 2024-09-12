@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using AugmentedRealityCourse;
 
 public class PetInteractionManager : MonoBehaviour
 {
-    public static PetInteractionManager Instance; // Singleton instance
+    public static PetInteractionManager Instance; // Singleton-instans som används för att tillhandahålla en global tillgång till PetInteractionManager
 
+    //Enum för de olika tillstånd ballongen kan ha
     public enum PetState
     {
         Idle,
@@ -15,7 +15,7 @@ public class PetInteractionManager : MonoBehaviour
         Hungry
     }
     
-    // Referens till Ballong-materialen
+    // Referens till Ballong-materialen för de olika tillstånden
     [SerializeField]
     private Material idleMaterial;
     [SerializeField]
@@ -43,39 +43,40 @@ public class PetInteractionManager : MonoBehaviour
     [SerializeField]
     private AudioClip popSound;
 
-    private MeshRenderer petRenderer; // MeshRenderer för den instansierade balongen
-    private GameObject currentPet; // Referens till de aktiva djuret
+    private MeshRenderer petRenderer; // MeshRenderer för den instansierade ballongen
+    private GameObject currentPet; // Referens till de nuvarande husdjuret i appen
 
     [SerializeField]
-    private Text petStateText; // UI för PetState
+    private Text petStateText; // UI-komponent som visar ballongens tillstånd
 
     [SerializeField]
-    private float fadeDuration = 1.0f; // Varighet i sekunder för Material-faden
+    private float fadeDuration = 1.0f; // Varighet för övergången mellan materialen
 
     [SerializeField]
-    private AudioSource petAudioSource; // AudioSource-komponent för ljudhantering
+    private AudioSource petAudioSource; // Ljudkomponent som hanterar ljuduppspelning
+    private PetState currentState; //Nuvarande tillstånd för ballongen
+    private Animator petAnimator; // Animator-komponent som hanterar animationer för ballongen
 
-    private PetState currentState;
-    private Animator petAnimator; // Animator-komponent för att hantera animationer
-
-    // Referens till State-knapparna
+    // Referens till knapparna som ändrar ballongens tillstånd
     public Button happyButton;
     public Button hungryButton;
     public Button sadButton;
     public Button idleButton;
 
+    // Initierar singleton-mönstret i Awake-metoden
     private void Awake()
     {
+
         if (Instance == null)
         {
-            Instance = this;
+            Instance = this; // Om det inte finns en instans, sätt denna till instansen
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Om det redan finns en instans, förstör detta objekt
         }
 
-        // Lägger till lyssnare till knapparna
+        // Lägger till lyssnare till knapparna för att ändra tillståndet för ballongen
         if (happyButton != null) happyButton.onClick.AddListener(SetHappyState);
         if (hungryButton != null) hungryButton.onClick.AddListener(SetHungryState);
         if (sadButton != null) sadButton.onClick.AddListener(SetSadState);
@@ -103,49 +104,49 @@ public class PetInteractionManager : MonoBehaviour
         SetPetState(PetState.Idle);
     }
 
+    // Huvudfunktion för att ändra husdjurets tillstånd
     private void SetPetState(PetState newState)
     {
-        // Stop any currently playing sound before changing the state
+        // Stoppar aktuellt ljud innan tillståndet ändras
         StopCurrentSound();
 
-        currentState = newState;
-        UpdatePetStateUI();
-        SetMaterialForCurrentState();
-        PlayAnimationForCurrentState(); // Spelar upp animationen för de aktuella state:t
-        PlaySoundForCurrentState(); // Spelar upp ljudet för de aktuella state:t
+        currentState = newState; // Sätter det nya tillståndet
+        UpdatePetStateUI(); // Uppdaterar UI:t med det nya tillståndet
+        SetMaterialForCurrentState(); // Sätter rätt material för det nya tillståndet
+        PlayAnimationForCurrentState(); // Spelar upp animationen för de nya tillståndet
+        PlaySoundForCurrentState(); // Spelar upp ljudet för de nya tillståndet
     }
 
-    // Initialiserar de aktuella objektet och dess komponenter
+    // Funktion för att sätta det nuvarande husdjuret
     public void SetPet(GameObject pet)
     {
         currentPet = pet;
-        MeshRenderer[] temp = pet.transform.GetChild(0).GetComponentsInChildren<MeshRenderer>();
-        petRenderer = temp.Length > 0 ? temp[0] : null;
+        MeshRenderer[] temp = pet.transform.GetChild(0).GetComponentsInChildren<MeshRenderer>(); // Hittar husdjurets MeshRenderer
+        petRenderer = temp.Length > 0 ? temp[0] : null; // Om det finns MeshRenderer, använd den första
 
-        // Hämtar animation-komponenten från gameobjektet
+        // Hämtar Animator och AudioSource-komponenter från husdjuret
         petAnimator = pet.transform.GetChild(0).GetComponent<Animator>();
-        // Hämtar ljud-komponenten från samma objekt
         petAudioSource = pet.transform.GetChild(0).GetComponent<AudioSource>();
 
-        // Initialiserar funktionen som randomiserar ett state
+        // Sätter ett slumpmässigt starttillstånd
         SetRandomInitialState();
     }
 
+    // Funktion för att sätta ett slumpmässigt starttillstånd för husdjuret
     private void SetRandomInitialState()
     {
-        currentState = (PetState)Random.Range(0, System.Enum.GetValues(typeof(PetState)).Length);
-        DebugManager.Instance.AddDebugMessage("Initial state set to: " + currentState);
+        currentState = (PetState)Random.Range(0, System.Enum.GetValues(typeof(PetState)).Length); // Sätter ett slumpmässigt tillstånd
         UpdatePetStateUI();
         SetMaterialForCurrentState();
         PlayAnimationForCurrentState();
         PlaySoundForCurrentState();
     }
 
+    // Funktion för att sätta material baserat på det aktuella tillståndet
     private void SetMaterialForCurrentState()
     {
-        if (petRenderer == null) return;
+        if (petRenderer == null) return; // Om det inte finns någon renderer, avbryt
 
-        DebugManager.Instance.AddDebugMessage("Setting material for state: " + currentState);
         switch (currentState)
         {
             case PetState.Idle:
@@ -163,89 +164,91 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    // Funktion för att sätta material och eventuellt använda en fade
     private void SetMaterial(Material newMaterial, bool useFade = true)
     {
         if (petRenderer != null && newMaterial != null)
         {
             if (useFade)
             {
-                StartCoroutine(FadeToMaterial(newMaterial));
+                StartCoroutine(FadeToMaterial(newMaterial)); // Startar en fade mellan materialen
             }
             else
             {
-                // Immediately set the material without fading
-                petRenderer.material = newMaterial;
+                petRenderer.material = newMaterial; // Sätter materialet direkt utan fade
             }
         }
     }
 
+    // Koroutine för att gradvis övergå mellan två material
     private IEnumerator FadeToMaterial(Material targetMaterial)
     {
-        Color startColor = petRenderer.material.color;
-        Color endColor = targetMaterial.color;
+        Color startColor = petRenderer.material.color; // Startfärg
+        Color endColor = targetMaterial.color; // Slutfärg
 
-        Material currentMaterial = petRenderer.material;
+        Material currentMaterial = petRenderer.material; // Aktuella materialet
 
+        // Gradvis övergång under fadeDuration
         for (float t = 0; t < 1; t += Time.deltaTime / fadeDuration)
         {
-            Color newColor = Color.Lerp(startColor, endColor, t);
-            currentMaterial.color = newColor;
+            Color newColor = Color.Lerp(startColor, endColor, t); // Interpolerar mellan start och slutfärg
+            currentMaterial.color = newColor; // Sätter den nya färgen
             yield return null;
         }
 
-        currentMaterial.color = endColor;
-        petRenderer.material = targetMaterial;
+        currentMaterial.color = endColor; // Sätter slutfärgen när övergången är klar
+        petRenderer.material = targetMaterial; // Sätter det nya materialet
     }
 
+    // Funktion för att ge husdjuret en snack
     public void GiveSnack()
     {
         StartCoroutine(GiveSnackRoutine());
     }
 
+    // Koroutine som hanterar vad som händer när husdjuret får en snack
     private IEnumerator GiveSnackRoutine()
     {
-        if (petRenderer == null) yield break;
+        if (petRenderer == null) yield break; // Om det inte finns någon renderer, avbryt
 
-        // Stop any currently playing sound before giving snack
+        // Stoppar eventuella ljud som spelas
         StopCurrentSound();
 
-        // Set the material without fading for Give Snack
+        // Sätter snack-materialet utan fade
         SetMaterial(snackMaterial, useFade: false);
 
-        PlayAnimation("GiveSnack"); // Play the Give-Snack animation
-        PlaySound(snackSound); // Play the snack sound
+        PlayAnimation("GiveSnack"); // Spelar upp animationen för att ge snack
+        PlaySound(snackSound); // Spelar snack-ljudet
 
         yield return new WaitForSeconds(4);
 
-        // Set the material to happy without fading after snack
-        SetMaterial(happyMaterial, useFade: false);
-        currentState = PetState.Happy;
+       
+        SetMaterial(happyMaterial, useFade: false); // Sätter materialet till "Happy" efter snack
+        currentState = PetState.Happy; // Ändrar tillståndet till Happy
         UpdatePetStateUI();
-        PlayAnimationForCurrentState();
-        PlaySoundForCurrentState();
+        PlayAnimationForCurrentState(); // Spelar upp Happy-animationen
+        PlaySoundForCurrentState(); // Spelar upp Happy-ljudet
     }
 
+    // Funktion för att leka med husdjuret
     public void Play()
     {
         StartCoroutine(PlayRoutine());
     }
 
+    // Koroutine som hanterar lekmomentet
     private IEnumerator PlayRoutine()
     {
         if (petRenderer == null) yield break;
 
-        // Stop any currently playing sound before playing
         StopCurrentSound();
-
-        // Set the material without fading when playing
         SetMaterial(playfulMaterial, useFade: false);
-
         PlayAnimation("Play"); // Spelar upp play-animationen
         PlaySound(playfulSound); // Spelar upp play-ljudet
 
         yield return new WaitForSeconds(4);
 
-        // Set the material to happy after play, you can decide if you want fading or not here
+        // Sätter Happy-materialet efter lek
         SetMaterial(happyMaterial, useFade: false);
         currentState = PetState.Happy;
         UpdatePetStateUI();
@@ -253,7 +256,7 @@ public class PetInteractionManager : MonoBehaviour
         PlaySoundForCurrentState(); // Spelar upp happy-ljudet
     }
 
-    // Uppdaterar PetUIState till aktuella state:t
+    // Funktion för att uppdatera UI:t som visar ballongens tillstånd
     private void UpdatePetStateUI()
     {
         if (petStateText != null)
@@ -262,6 +265,7 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    // Spelar upp animation baserat på nuvarande tillstånd
     private void PlayAnimationForCurrentState()
     {
         if (petAnimator == null) return;
@@ -283,6 +287,7 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    // Spelar upp ljud baserat på nuvarande tillstånd
     private void PlaySoundForCurrentState()
     {
         if (petAudioSource == null) return;
@@ -301,38 +306,39 @@ public class PetInteractionManager : MonoBehaviour
         }
     }
 
+    // Funktion för att spela en specifik animation
     private void PlayAnimation(string animationName)
     {
         if (petAnimator != null)
         {
-            petAnimator.Play(animationName);
+            petAnimator.Play(animationName); // Spelar upp den angivna animationen
         }
     }
 
+    // Funktion för att spela ett specifikt ljud
     private void PlaySound(AudioClip clip)
     {
         if (petAudioSource == null || clip == null) return;
 
-        // Stop the currently playing sound before playing a new one
-        StopCurrentSound();
-
-        // Play the new sound
-        petAudioSource.PlayOneShot(clip);
+        StopCurrentSound(); // Stoppar eventuellt ljud som spelas
+        petAudioSource.PlayOneShot(clip); // Spelar upp ljudklippet
     }
 
+    // Stoppar det ljud som för tillfället spelas
     private void StopCurrentSound()
     {
         if (petAudioSource.isPlaying)
         {
-            petAudioSource.Stop();
+            petAudioSource.Stop(); // Stoppar ljudet om något spelas
         }
     }
 
+    // Funktion för att spela upp en pop-animation och ljud
     public void PlayPopAnimationAndSound()
     {
         if (petAnimator != null)
         {
-            petAnimator.Play("Pop"); // Replace "Pop" with your actual animation name
+            petAnimator.Play("Pop"); 
         }
 
         if (petAudioSource != null && popSound != null)
@@ -340,17 +346,17 @@ public class PetInteractionManager : MonoBehaviour
             petAudioSource.PlayOneShot(popSound);
         }
 
-        StartCoroutine(DestroyBalloonAfterAnimation());
+        StartCoroutine(DestroyBalloonAfterAnimation()); // Startar koroutinen för att förstöra ballongen
     }
 
+    // Koroutine som förstör husdjuret efter Pop-animationen
     private IEnumerator DestroyBalloonAfterAnimation()
     {
-        // Wait for the animation and sound to complete
-        yield return new WaitForSeconds(0.2f); // Adjust based on animation duration
+        yield return new WaitForSeconds(0.2f); // Väntar tills animationen är klar
 
         if (currentPet != null)
         {
-            Destroy(currentPet); // Destroy the balloon GameObject
+            Destroy(currentPet); // Förstör ballong-objektet
         }
     }
 }
