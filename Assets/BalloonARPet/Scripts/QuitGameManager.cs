@@ -5,13 +5,13 @@ using UnityEngine.UI;
 public class QuitGameManager : MonoBehaviour
 {
     [SerializeField]
-    private Button quitButton; // Referens till knappen som öppnar bekräftelsepanelen
+    private Button quitButton;
     [SerializeField]
-    private GameObject confirmationPanel; // Referens till bekräftelsepanelen (frågar om man vill avsluta)
+    private GameObject confirmationPanel;
     [SerializeField]
-    private Button yesButton; // Referens till "Yes"-knappen på bekräftelsepanelen
+    private Button yesButton;
     [SerializeField]
-    private Button noButton; // Referens till "No"-knappen på bekräftelsepanelen
+    private Button noButton;
 
     [SerializeField]
     private PetInteractionManager petInteractionManager; // Referens till PetInteractionManager för att hantera ballongens pop-animering
@@ -53,7 +53,7 @@ public class QuitGameManager : MonoBehaviour
         }
     }
 
-    // Metod som anropas när "Yes"-knappen klickas (spelaren bekräftar att de vill avsluta)
+    // Metod som anropas när "Yes"-knappen klickas
     private void OnYesButtonClick()
     {
         // Anropa PetInteractionManager för att spela pop-animering och ljud, samt ta bort ballongen
@@ -66,7 +66,7 @@ public class QuitGameManager : MonoBehaviour
         StartCoroutine(QuitGameAfterAnimation());
     }
 
-    // Metod som anropas när "No"-knappen klickas (spelaren avbryter avslutningen)
+    // Metod som anropas när "No"-knappen klickas
     private void OnNoButtonClick()
     {
         // Dölj bekräftelsepanelen igen

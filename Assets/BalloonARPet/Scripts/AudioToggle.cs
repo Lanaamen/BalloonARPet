@@ -22,8 +22,8 @@ public class AudioToggle : MonoBehaviour
     // Funktion som växlar ljudet mellan på och av
     private void ToggleAudio()
     {
-        isMuted = !isMuted; // Växlar tillståndet för ljudet (är det av, slås det på och vice versa)
-        UpdateButtonUI(); // Uppdaterar knappens UI (text) och ändrar ljudstatus
+        isMuted = !isMuted; // Växlar tillståndet för ljudet (på och av)
+        UpdateButtonUI(); // Uppdaterar knappens UI och ändrar ljudstatus
     }
 
     // Funktion som uppdaterar knappens text och ljudnivån i spelet

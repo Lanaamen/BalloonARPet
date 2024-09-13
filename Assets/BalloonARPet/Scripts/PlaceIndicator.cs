@@ -6,8 +6,8 @@ using UnityEngine.XR.ARSubsystems;
 
 public class PlaceIndicator : MonoBehaviour
 {
-    private ARRaycastManager raycastManager; // Referens till ARRaycastManager
-    private GameObject indicator; // Referens till indikatorn som visar var objekt kan placeras
+    private ARRaycastManager raycastManager; 
+    private GameObject indicator; // Referens till indikatorn
     private List<ARRaycastHit> hits = new List<ARRaycastHit> (); // Lista för att lagra träffar från raycast
 
     void Start()
@@ -20,7 +20,6 @@ public class PlaceIndicator : MonoBehaviour
         indicator.SetActive (false);
     }
 
-    // Update-metoden körs varje bildruta för att hantera indikatorns placering
     void Update()
     {
         // Skapar en 2D-vector i mitten av skärmen som används för raycast (screen center point)

@@ -15,9 +15,7 @@ public class ARTapToPlace : MonoBehaviour
     private static List<ARRaycastHit> hitResults = new List<ARRaycastHit>(); // Lista för att lagra träffar från raycast
 
     private GameObject spawnedObject; // Referens till det instansierade objektet
-
     private Camera mainCamera;
-
     private InputAction touchAction; // InputAction för att hantera touch-input
 
     private void Awake()
@@ -75,7 +73,7 @@ public class ARTapToPlace : MonoBehaviour
             }
             else
             {
-                // Om ett objekt redan är instansierat, flytta det till den nya positionen, detta för att inte skapa hur många objekt som helst
+                // Om ett objekt redan är instansierat, flytta det till den nya positionen, detta istället för att skapa fler
                 spawnedObject.transform.position = hitPose.position;
                 spawnedObject.transform.rotation = hitPose.rotation;
             }
